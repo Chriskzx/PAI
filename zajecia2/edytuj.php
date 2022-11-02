@@ -10,12 +10,16 @@ if (isset($_GET['id'])) {
 
     if (isset($_POST['zapisz'])) {
         // obsługa edycji rekordu
-        $stmt = $pdo->prepare("UPDATE samochody SET marka = :marka, model = :model, rok = :rok, typ_silnika = :typ_silnika WHERE id = :id");
+        $stmt = $pdo->prepare("UPDATE samochody SET marka = :marka, model = :model, rok = :rok, typ_silnika = :typ_silnika, pojemnosc = :pojemnosc, liczba_poduszek = :liczba_poduszek, abs = :abs, esp = :esp WHERE id = :id");
         $wynik = $stmt->execute([
             'marka' => $_POST['marka'],
             'model' => $_POST['model'],
             'rok' => $_POST['rok'],
             'typ_silnika' => $_POST['typ_silnika'],
+            'pojemnosc' => $_POST['pojemnosc'],
+            'liczba_poduszek' => $_POST['liczba_poduszek'],
+            'abs' => $_POST['abs'],
+            'esp' => $_POST['esp'],
             'id' => $id,
         ]);
 
@@ -74,6 +78,32 @@ if (isset($_GET['id'])) {
                         <option value="diesel" <?= ($wiersz['typ_silnika'] ?? '') == 'diesel' ? 'selected' : '' ?>>diesel</option>
                     </select>
                 </td>
+            </tr>
+            <tr>
+                <td>Pojemność</td>
+                <td><input type="text" name="pojemnosc" value="<?= $wiersz['pojemnosc'] ?? ''?>"/></td>
+            </tr>
+            <tr>
+                <td>Liczba poduszek</td>
+                <td>
+                    <select name="liczba_poduszek">
+                        <option value="1" <?= ($wiersz['liczba_poduszek'] ?? '') == '1' ? 'selected' : '' ?>>1</option>
+                        <option value="2" <?= ($wiersz['liczba_poduszek'] ?? '') == '2' ? 'selected' : '' ?>>2</option>
+                        <option value="4" <?= ($wiersz['liczba_poduszek'] ?? '') == '4' ? 'selected' : '' ?>>4</option>
+                        <option value="6" <?= ($wiersz['liczba_poduszek'] ?? '') == '6' ? 'selected' : '' ?>>6</option>
+                        <option value="8" <?= ($wiersz['liczba_poduszek'] ?? '') == '8' ? 'selected' : '' ?>>8</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>abs</td>
+                <td><input type="radio" name="abs" value="tak" <?php if($wiersz['abs'] == 'tak') echo 'checked="checked"'; ?>>tak</td>
+                <td><input type="radio" name="abs" value="nie" <?php if($wiersz['abs'] == 'nie') echo 'checked="checked"'; ?>>nie</td>
+            </tr>
+            <tr>
+                <td>esp</td>
+                <td><input type="radio" name="esp" value="tak" <?php if($wiersz['esp'] == 'tak') echo 'checked="checked"'; ?>>tak</td>
+                <td><input type="radio" name="esp" value="nie" <?php if($wiersz['esp'] == 'tak') echo 'checked="checked"'; ?>>nie</td>
             </tr>
             <tr>
                 <td colspan="2"><input type="submit" name="zapisz" value="Zapisz" /></td>

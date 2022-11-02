@@ -48,11 +48,11 @@ foreach ($pdo->query('SELECT * FROM samochody ORDER BY marka, model') as $wiersz
 				<td>
 					<a href="szczegoly.php?id=<?= $d['id'] ?>">szczegóły</a>
 					<a href="edytuj.php?id=<?= $d['id'] ?>">edytuj</a>
-					<a href="usun.php?id=<?= $d['id'] ?>">usuń</a>
+					<a href="usun.php?id=<?= $d['id'] ?>" onclick="return confirm('Are you sure you want to delete this item?')">usuń</a>
 				</td>
 			</tr>
 		<?php endforeach; ?>
-	</table>
+		</table>
 
 </body>
 

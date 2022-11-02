@@ -7,12 +7,17 @@ sprawdzLogowanie();
 if (isset($_POST['dodaj'])) {
     $pdo = polacz();
 
-    $stmt = $pdo->prepare("INSERT INTO samochody (marka, model, rok, typ_silnika) VALUES (:marka, :model, :rok, :typ_silnika)");
+    $stmt = $pdo->prepare("INSERT INTO samochody (marka, model, rok, typ_silnika, pojemnosc, liczba_poduszek, abs, esp) VALUES (:marka, :model, :rok, :typ_silnika, :pojemnosc, :liczba_poduszek, :abs, :esp)");
     $wynik = $stmt->execute([
         'marka' => $_POST['marka'],
         'model' => $_POST['model'],
         'rok' => $_POST['rok'],
         'typ_silnika' => $_POST['typ_silnika'],
+        'pojemnosc' => $_POST['pojemnosc'],
+        'liczba_poduszek' => $_POST['liczba_poduszek'],
+        'abs' => $_POST['abs'],
+        'esp' => $_POST['esp'],
+        
     ]);
 
     if ($wynik == true) {
@@ -56,6 +61,32 @@ if (isset($_POST['dodaj'])) {
                 </td>
             </tr>
             <tr>
+                <td>Pojemność</td>
+                <td><input type="text" name="pojemnosc"></td>
+            </tr>
+            <tr>
+                <td>Liczba poduszek</td>
+                <td>
+                    <select name="liczba_poduszek">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                        <option value="8">8</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>abs</td>
+                <td><input type="radio" name="abs" value="tak">tak</td>
+                <td><input type="radio" name="abs" value="nie">nie</td>
+            </tr>
+            <tr>
+                <td>esp</td>
+                <td><input type="radio" name="esp" value="tak">tak</td>
+                <td><input type="radio" name="esp" value="nie">nie</td>
+            </tr>
+            <tr>
                 <td colspan="2"><input type="submit" name="dodaj" value="Dodaj" /></td>
             </tr>
         </table>
@@ -65,5 +96,3 @@ if (isset($_POST['dodaj'])) {
         <a href="index.php">[ Powrót do listy ]</a>
     </p>
 </body>
-
-</html>

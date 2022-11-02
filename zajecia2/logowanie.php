@@ -2,21 +2,30 @@
 
 session_start();
 
+if (!isset($_SESSION['count'])) {
+    $_SESSION['count'] = 0;
+}
+
 if (isset($_POST['zaloguj'])) {
 	$pdo = new PDO('mysql:host=localhost;dbname=test', 'root', '');
 
 	$stmt = $pdo->prepare("SELECT * FROM uzytkownicy WHERE login = :login AND haslo = :haslo");
 	$stmt->execute(['login' => $_POST['login'], 'haslo' => $_POST['haslo']]);
 	$wynik = $stmt->fetch();
+    
 	
 	if ($wynik) {
 		$_SESSION['zalogowany'] = 'tak';
 		$_SESSION['id'] = $wynik['id'];
 		header("Location: index.php");
 		exit();
-	} else {
+	} else if($_SESSION['count'] < 2){
 		$komunikat = "Wprowadzono zły login lub hasło.";
-	}
+        $_SESSION['count']++;
+	} else if($_SESSION['count'] >= 2){
+        $komunikat = "Zbyt duzo zlych prob logowania, poczekaj 10 sekund";
+        sleep(10);
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -29,7 +38,7 @@ if (isset($_POST['zaloguj'])) {
 		<?php if(!empty($komunikat)): ?>
 			<p style="font-weight: bold; color: red;"><?=$komunikat ?></p>
 		<?php endif; ?>
-		
+        
         <form method="post" action="">
             <table>
                 <tr>
