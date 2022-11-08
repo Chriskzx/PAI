@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Application;
 
+use Application\Model\Liczby;
+use Application\Model\Miesiace;
 use Application\Model\Data;
 use Laminas\Mvc\Controller\LazyControllerAbstractFactory;
 use Laminas\Router\Http\Literal;
@@ -43,6 +45,8 @@ return [
     'service_manager' => [
         'factories' => [
             Data::class => InvokableFactory::class,
+            Miesiace::class => InvokableFactory::class,
+            Liczby::class => InvokableFactory::class,
         ],
     ],
     'view_manager' => [
