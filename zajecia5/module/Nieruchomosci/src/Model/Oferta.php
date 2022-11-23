@@ -3,10 +3,13 @@
 
 namespace Nieruchomosci\Model;
 
+use ArrayObject;
 use Laminas\Db\Adapter as DbAdapter;
+use Laminas\Db\Sql\Predicate\Predicate;
 use Laminas\Db\Sql\Sql;
 use Laminas\Paginator\Adapter\LaminasDb\DbSelect;
 use Laminas\Paginator\Paginator;
+use Laminas\Validator\LessThan;
 
 class Oferta implements DbAdapter\AdapterAwareInterface
 {
@@ -34,11 +37,17 @@ class Oferta implements DbAdapter\AdapterAwareInterface
         if (!empty($szukaj['numer'])) {
             $select->where(['numer' => $szukaj['numer']]);
         }
-        if (!empty($szukaj['powierzchnia'])) {
-            $select->where(['powierzchnia' => $szukaj['powierzchnia']]);
+        if (!empty($szukaj['powierzchniaMin'])) {
+            $select->where->greaterThanOrEqualTo('powierzchnia', $szukaj['powierzchniaMin']);
         }
-        if (!empty($szukaj['cena'])) {
-            $select->where(['cena' => $szukaj['cena']]);
+        if (!empty($szukaj['powierzchniaMax'])) {
+            $select->where->lessThanOrEqualTo('powierzchnia', $szukaj['powierzchniaMax']);
+        }
+        if (!empty($szukaj['cenaMin'])) {
+            $select->where->greaterThanOrEqualTo('cena', $szukaj['cenaMin']);
+        }
+        if (!empty($szukaj['cenaMax'])) {
+            $select->where->lessThanOrEqualTo('cena', $szukaj['cenaMax']);
         }
 
         $paginatorAdapter = new DbSelect($select, $dbAdapter);
@@ -52,7 +61,7 @@ class Oferta implements DbAdapter\AdapterAwareInterface
      * @param int $id
      * @return array
      */
-    public function pobierz(int $id): array
+    public function pobierz(int $id): ArrayObject 
     {
         $dbAdapter = $this->adapter;
 
