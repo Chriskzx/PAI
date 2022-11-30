@@ -6,6 +6,7 @@ use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Nieruchomosci\Form;
 use Nieruchomosci\Model\Oferta;
+use Nieruchomosci\Model\Koszyk;
 
 class OfertyController extends AbstractActionController
 {
@@ -40,11 +41,14 @@ class OfertyController extends AbstractActionController
 
     public function szczegolyAction()
     {
+        $form = new Form\OfertaSzukajForm();
         $daneOferty = $this->oferta->pobierz($this->params('id'));
+        $form->populateValues($daneOferty);
 
-        return ['oferta' => $daneOferty];
+        return ['oferta' => $daneOferty,
+                'form' => $form];
     }
-
+    
     public function drukujAction()
     {
         $oferta = $this->oferta->pobierz($this->params('id'));
@@ -53,6 +57,15 @@ class OfertyController extends AbstractActionController
             $this->oferta->drukuj($oferta);
         }
 
+        return $this->getResponse();
+    }
+
+    public function drukujWszystkoAction()
+    {
+        $oferty = $this->oferta->pobierzDoDruku();
+        if ($oferty) {
+            $this->oferta->drukujWszystko($oferty);
+        }
         return $this->getResponse();
     }
 }
